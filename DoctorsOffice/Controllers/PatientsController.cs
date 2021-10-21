@@ -30,14 +30,41 @@ namespace DoctorsOffice.Controllers
   [HttpPost]
   public ActionResult Create(Patient patient, int DoctorId)
   {
-    _db.Patients.Add(patient);
-    _db.SaveChanges();
-    if (DoctorId != 0)
-    {
-        _db.DoctorPatient.Add(new DoctorPatient() { DoctorId = DoctorId, PatientId = patient.PatientId });
-    }
-    _db.SaveChanges();
-    return RedirectToAction("Index");
+
+     bool isUnique = true;
+      List<Patient> PatientList = _db.Patients.ToList();
+      foreach(Patient iteration in PatientList)
+      {
+        if (patient.Name == iteration.Name) 
+        {
+          isUnique = false;
+          ModelState.AddModelError("DuplicateName", patient.Name + " Is already enrolled");
+          ViewBag.DoctorId = new SelectList(_db.Doctors, "DoctorId", "Name");
+          return View();
+        }
+      }
+      if (isUnique)
+      {
+        _db.Patients.Add(patient);
+        _db.SaveChanges();
+        if (DoctorId != 0)
+        {
+          _db.DoctorPatient.Add(new DoctorPatient() { DoctorId = DoctorId, PatientId = patient.PatientId });
+        }
+        _db.SaveChanges();
+      }
+      return RedirectToAction("Index");
+    // if (ModelState.IsValid) {
+    // _db.Patients.Add(patient);
+    // _db.SaveChanges();
+    // if (DoctorId != 0)
+    // {
+    //     _db.DoctorPatient.Add(new DoctorPatient() { DoctorId = DoctorId, PatientId = patient.PatientId });
+    // }
+    // }
+    // _db.SaveChanges();
+    // return RedirectToAction("Index");
+    
   }
 
   public ActionResult Details(int id)
@@ -80,7 +107,12 @@ namespace DoctorsOffice.Controllers
   {
     if (DoctorId != 0)
     {
-    _db.DoctorPatient.Add(new DoctorPatient() { DoctorId = DoctorId, PatientId = patient.PatientId });
+      if(_db.DoctorPatient.Any(dp => dp.DoctorId == DoctorId && dp.PatientId == patient.PatientId) == false)
+      {
+        _db.DoctorPatient.Add(new DoctorPatient() { DoctorId = DoctorId, PatientId = patient.PatientId });
+        ViewBag.DoctorId = new SelectList(_db.Doctors, "DoctorId", "Name");
+      }
+      return View();
     }
     _db.SaveChanges();
     return RedirectToAction("Index");

@@ -11,11 +11,11 @@
 
 @if(@Model.JoinEntities.Count == 0)
 {
-  <p>This patient does not belong to any doctors</p>
+  <p>This patient does not currently see any doctors</p>
 }
 else
 {
-  <h4>Doctors the patient belongs to:</h4>
+  <h4>This patient sees the following doctors:</h4>
   <ul>
   @foreach(var join in Model.JoinEntities)
   {
@@ -31,7 +31,7 @@ else
   
 
 
-<p>@Html.ActionLink("Add a Doctor", "AddDoctor", new { id = Model.PatientId })</p>
+<p>@Html.ActionLink("Add an existing Doctor for this patient", "AddDoctor", new { id = Model.PatientId })</p>
 <p>@Html.ActionLink("Back to list", "Index")</p>
 <p>@Html.ActionLink("Edit Patient", "Edit", new { id = Model.PatientId })</p>
 <p>@Html.ActionLink("Delete Patient", "Delete", new { id = Model.PatientId })</p>

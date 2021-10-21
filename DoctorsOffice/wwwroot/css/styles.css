@@ -1,3 +1,12 @@
+body, h1, h2, h3, h4, li, ul, p {
+  font-family: 'EB Garamond', serif;
+  text-align: center;
+}
+
+li {
+  list-style-position: inside;
+}
+
 div#footer {
 	position:fixed;
 	bottom:0px;

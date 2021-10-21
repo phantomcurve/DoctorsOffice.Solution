@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using DoctorsOffice.Models;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace DoctorsOffice.Controllers
 {
@@ -23,6 +24,7 @@ namespace DoctorsOffice.Controllers
 
     public ActionResult Create()
     {
+      ViewBag.DoctorId = new SelectList(_db.Specialties, "SpecialtyId", "Name");
       return View();
     }
 
